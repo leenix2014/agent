@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{menu.baraccat}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/swiper.min.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script><link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/popodataime.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+</head>
+<body>
+<div class="content homepage">
+    <header>
+        <a href="menu" class="left"><i class="fa fa-chevron-left"></i></a>
+        <div class="top-tit"><label th:text="#{menu.baraccat}"/></div>
+        <a href="logout" class="right"><label th:text="#{menu.logout}" style="font-size: .12rem;cursor: pointer"/></a>
+    </header>
+    <div class="swiper-container tb-box swiper-container-horizontal">
+        <div class="search">
+            <input type="search" th:attr="placeholder=#{search.tips}" id="txtKeyWord" oninput="Filter()"/>
+            <a style="cursor:pointer" class="search-btn"><i class="fa fa-search"></i></a>
+        </div>
+        <div class="right"><span th:text="#{prompt.welcome}"></span><span th:text="${session.loginUser.name}"></span><span th:text="#{prompt.fullstop}"></span>
+        	<span th:text="#{prompt.your.agent.level}"></span><span th:text="${session.loginUser.level}"></span><span th:text="#{prompt.comma}"></span>
+        	<span th:text="#{prompt.your.room.card}"></span><span th:text="${session.loginUser.roomCardCount}"></span><span th:text="#{prompt.fullstop}"></span>
+        </div>
+        <div class="time-box">
+            <div class="col"><a style="cursor:pointer;margin-left: -.1rem" href="toAddBaccarat"><label th:text="#{baccarat.add}"/></a></div>
+        </div>
+
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                <table class="tb">
+                    <thead>
+                    <tr>
+                        <td><label th:text="#{baccarat.id}"/></td>  
+                        <td><label th:text="#{common.channel}"/></td>
+                        <td><label th:text="#{baccarat.minCoin}"/></td>
+                        <td><label th:text="#{baccarat.betTime}"/></td>
+                        <td><label th:text="#{baccarat.minBet}"/></td>
+                        <td><label th:text="#{baccarat.maxBet}"/></td>  
+                        <td><label th:text="#{common.adminIds}"/></td>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="scroll-wrap">
+                <div th:if="${baccarats.size() == 0}" style="text-align: center"><span th:text="#{common.noData}"></span></div>
+                <table class="tb">
+                    <tbody id="divList1">
+                    	<tr th:each="baccarat : ${baccarats}">
+		                	<td><a th:attr="href='baccaratDetail?id='+${baccarat.id}"><div class="name"><label th:text="${baccarat.roomId}"></label></div></a></td>
+		                	<td><span th:text="${baccarat.channel}"></span></td>
+		                    <td><span th:text="${baccarat.minCoin}"></span></td>
+		                	<td><span th:text="${baccarat.betTime}"></span></td>
+		                    <td><span th:text="${baccarat.minBet}"></span></td>
+		                    <td><span th:text="${baccarat.maxBet}"></span></td>
+		                    <td><span th:text="${baccarat.adminIds}"></span></td>
+                    	</tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                <table class="tb">
+                    <thead>
+                    <tr>
+                        <td><label th:text="#{baccarat.id}"/></td>  
+                        <td><label th:text="#{baccarat.drawPercent}"/></td>    
+                        <td><label th:text="#{baccarat.takeSeatCoin}"/></td>  
+                        <td><label th:text="#{baccarat.maxRed}"/></td>
+                        <td><label th:text="#{baccarat.tiePairMinBet}"/></td>
+                        <td><label th:text="#{baccarat.tiePairMaxBet}"/></td>    
+                        <td><label th:text="#{operation}"/></td>  
+                        <!-- <td><label th:text="#{baccarat.overTime}"/></td> -->
+                    </tr>
+                    </thead>
+                </table>
+                <div class="scroll-wrap">
+                <div th:if="${baccarats.size() == 0}" style="text-align: center"><span th:text="#{common.noData}"></span></div>
+                <table class="tb">
+                    <tbody id="divList2">
+                    	<tr th:each="baccarat : ${baccarats}">
+		                	<td><a th:attr="href='baccaratDetail?id='+${baccarat.id}"><div class="name"><label th:text="${baccarat.roomId}"></label></div></a></td>
+		                    <td><span th:text="${baccarat.drawPercent}+'%'"></span></td>
+		                    <td><span th:text="${baccarat.takeSeatCoin}"></span></td>
+		                    <td><span th:text="${baccarat.maxRed}"></span></td>
+		                    <td><span th:text="${baccarat.tiePairMinBet}"></span></td>
+		                    <td><span th:text="${baccarat.tiePairMaxBet}"></span></td>
+		                    <td><span><a th:href="'baccaratDelete?id='+${baccarat.id}" th:text="#{operation.Hide}"></a></span></td>
+                    	</tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-next"><i class="fa fa-chevron-right"></i></div>
+    <div class="swiper-prev swiper-button-disabled"><i class="fa fa-chevron-left"></i></div>
+</div>
+
+<script th:inline="javascript">
+    $(function () {
+        //时间
+        $(".datetime").popodatetime();
+
+        var swiper = new Swiper('.swiper-container', {
+            nextButton: '.swiper-next',
+            prevButton: '.swiper-prev',
+            preventClicks: false,
+        });
+    })
+    
+    function Filter() {
+        var keyword = $.trim($("#txtKeyWord").val());
+        $("#divList1").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList2").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList3").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList4").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+    }
+
+    //LoadList();
+</script>
+</body></html>

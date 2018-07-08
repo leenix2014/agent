@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{coinroom.detail}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/swiper.min.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script><link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/popodataime.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+    <style type="text/css">
+    div.item{padding: .1rem 0;font-size: .12rem;border-bottom: solid 1px #e5e5e5;width: 100%;}
+    label{width:150px;display: inline-block;}
+    input[type="text"], input[type="submit"],select{display: inline-block;margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;height: .23rem;line-height: .23rem;font-size: .12rem;}
+    .detail label{
+    	display: inline-block;margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;height: .23rem;line-height: .23rem;font-size: .12rem;
+    }
+    </style>
+</head>
+<body>
+<div class="content homepage">
+    <header>
+        <a href="coinrooms" class="left"><i class="fa fa-chevron-left"></i></a>
+        <div class="top-tit"><label th:text="#{coinroom.detail}"/></div>
+    </header>
+    <div class="tb-box">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                <form th:action="@{${operType} == 'add' ? 'addCoinRoom' : 'updateCoinRoom'}" th:object="${coinRoom}" method="POST" onsubmit="return beforeSubmit();">
+                    <div class="item">
+                        <label th:text="#{coinroom.id}"></label>
+                        <span class="detail">
+                            <input type="hidden" th:field="*{id}"/>
+                            <input type="text" th:field="*{roomId}" maxlength="5"/>
+                            <span th:if="${#fields.hasErrors('roomId')}" th:errors="*{roomId}">Room ID Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{coinroom.mode}"></label>
+                        <span class="detail">
+                            <select th:field="*{mode}">
+                            	<option value="dealer_none"><span th:text="#{coinroom.mode.dealer_none}"></span></option>
+                            	<option value="dealer_grab"><span th:text="#{coinroom.mode.dealer_grab}"></span></option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('mode')}" th:errors="*{mode}">Mode Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{coinroom.baseScore}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{baseScore}" maxlength="5" onchange="changeGrade()"/>
+                            <span th:if="${#fields.hasErrors('baseScore')}" th:errors="*{baseScore}">Base Score Error</span>
+                        </span>
+                    </div>
+                    <div class="item">
+                        <label th:text="#{coinroom.grade}"></label>
+                        <span class="detail" id="gradeText">
+                            <label th:if="*{grade} != null and *{grade} != ''" th:text="#{coinroom.grade.+*{grade}}"></label>
+                        </span>
+                        <input type="hidden" th:field="*{grade}"/>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{coinroom.minCoin}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{minCoin}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('minCoin')}" th:errors="*{minCoin}">Minimum Coin Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{coinroom.needChargeCoin}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{needChargeCoin}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('needChargeCoin')}" th:errors="*{needChargeCoin}">Need Charge Coin Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{coinroom.kickOutCoin}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{kickOutCoin}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('kickOutCoin')}" th:errors="*{kickOutCoin}">Kick Out Coin Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{coinroom.maxSeat}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{maxSeat}" maxlength="2"/>
+                            <span th:if="${#fields.hasErrors('maxSeat')}" th:errors="*{maxSeat}">Maximum Seat Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{coinroom.drawPercent}"></label>
+                        <span class="detail">
+                            <input class="form-control"  type="text" th:field="*{drawPercent}" maxlength="2"/>%
+                            <span th:if="${#fields.hasErrors('drawPercent')}" th:errors="*{drawPercent}">Draw Percent Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{coinroom.encrypted}"></label>
+                        <span class="detail">
+                        	<select th:field="*{encrypted}" onchange="onEncryptedChanged()">
+                            	<option value="true"><span th:text="#{coinroom.encrypt.true}"></span></option>
+                            	<option value="false"><span th:text="#{coinroom.encrypt.false}"></span></option>
+                            </select>
+                        </span>
+                    </div>
+                    
+                    <div class="item" id="password">
+                        <label th:text="#{coinroom.pwd}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" maxlength="4" th:field="*{pwd}"/>
+                            <span th:if="${#fields.hasErrors('pwd')}" th:errors="*{pwd}">Password Error</span>
+                        </span>
+                    </div>
+                    
+					<div style="text-align: center">
+					<input type="submit" th:if="${operType} != 'add'" th:attr="value=#{operation.update}"/>
+                    <input type="submit" th:if="${operType} == 'add'" th:attr="value=#{operation.add}"/>
+                    <input type="hidden" id="operType" th:attr="value=${operType}"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        onEncryptedChanged();
+        var needChargeCoin = $("#needChargeCoin").val();
+        if(needChargeCoin == ''){
+        	$("#needChargeCoin").val(100);
+        }
+        var kickOutCoin = $("#kickOutCoin").val();
+        if(kickOutCoin == ''){
+        	$("#kickOutCoin").val(0);
+        }
+    })
+    
+    function onEncryptedChanged(){
+    	var encrypted = $("#encrypted").val();
+    	if(encrypted == 'true'){
+    		$("#password").css("display", "block");
+    	} else {
+    		$("#password").css("display", "none");
+    	}
+    }
+    
+    function checkGrade(){
+    	var str = $("#baseScore").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(str)){
+    		gm.alert("<label th:text='#{coinroom.baseScore}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#baseScore").focus();});
+    		return false;
+    	}
+    	return true;
+    }
+    
+    function changeGrade(){
+    	var baseScore = parseInt($("#baseScore").val());
+    	if(isNaN(baseScore)){
+    		gm.alert("<label th:text='#{coinroom.baseScore}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#baseScore").focus();});
+    		return;
+    	}
+    	/*<![CDATA[*/
+    	if(baseScore <= 0){
+    	/*]]>*/
+    		gm.alert("<label th:text='#{coinroom.baseScore.must.positive}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#baseScore").focus();});
+    		return;
+    	}
+    	/*<![CDATA[*/
+    	if(baseScore <= 10){
+    	/*]]>*/
+    		$("#gradeText").html('<label th:text="#{coinroom.grade.primary}"></label>');
+    		$("#grade").val("primary");
+    	/*<![CDATA[*/
+    	} else if(baseScore <= 100){
+    	/*]]>*/
+    		$("#gradeText").html('<label th:text="#{coinroom.grade.junior}"></label>');
+    		$("#grade").val("junior");
+    	} else {
+    		$("#gradeText").html('<label th:text="#{coinroom.grade.senior}"></label>');
+    		$("#grade").val("senior");
+    	}
+    }
+    
+    function checkCoinRoom(){
+    	var roomId = $("#roomId").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(roomId)){
+    		gm.alert("<label th:text='#{coinroom.id}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#roomId").focus();});
+    		return false;
+    	}
+    	/*<![CDATA[*/
+    	if(roomId.length < 5){
+    	/*]]>*/
+    		gm.alert("<label th:text='#{coinroom.id.length.not.enough}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#roomId").focus();});
+    		return false;
+    	}
+    	var encrypted = $("#encrypted").val();
+    	var pwd = $("#pwd").val();
+    	/*<![CDATA[*/
+    	if(encrypted == 'true' && pwd == ''){
+    	/*]]>*/
+    		gm.alert("<label th:text='#{coinroom.pwd.empty}'/>");
+    		return false;
+    	}
+    	
+    	var id = $("#id").val();
+    	if($("#operType").val() == 'add'){
+    		id = 0;
+    	}
+    	var goOn = true;
+    	$.ajax({type:'POST', url:'checkCoinRoom', data: {roomId:roomId, id:id}, success: function (ret) {
+    		if(ret.roomIdExists == true){
+    			gm.alert("<label th:text='#{coinroom.id.exists}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#roomId").focus();});
+    			goOn = false;
+    		} else {
+    			goOn = true;
+    		}
+        }, async: false});
+    	
+    	return goOn;
+    }
+    
+    function beforeSubmit(){
+    	if(!checkGrade()){
+    		return false;
+    	}
+    	if(!checkMinCoin()){
+    		return false;
+    	}
+    	if(!checkNeedChargeCoin()){
+    		return false;
+    	}
+    	if(!checkKickOutCoin()){
+    		return false;
+    	}
+    	if(!checkMaxSeat()){
+    		return false;
+    	}
+    	if(!checkDrawPercent()){
+    		return false;
+    	}
+    	if(!checkCoinRoom()){
+    		return false;
+    	}
+    	return true;
+    }
+    
+    function checkMinCoin(){
+    	var minCoin = $("#minCoin").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(minCoin)){
+    		gm.alert("<label th:text='#{coinroom.minCoin}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#minCoin").focus();});
+    		return false;
+    	}
+    	return true;
+    }
+    
+    function checkNeedChargeCoin(){
+    	var needChargeCoin = $("#needChargeCoin").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(needChargeCoin)){
+    		gm.alert("<label th:text='#{coinroom.needChargeCoin}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#needChargeCoin").focus();});
+    		return false;
+    	}
+    	return true;
+    }
+    
+    function checkKickOutCoin(){
+    	var kickOutCoin = $("#kickOutCoin").val();
+    	if(!/^\+?[0-9][0-9]*$/.test(kickOutCoin)){
+    		gm.alert("<label th:text='#{coinroom.kickOutCoin}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#kickOutCoin").focus();});
+    		return false;
+    	}
+    	return true;
+    }
+    
+    function checkMaxSeat(){
+    	var maxSeat = $("#maxSeat").val();
+    	if(!/^\+?[2-9][0-9]*$/.test(maxSeat)){
+    		gm.alert("<label th:text='#{coinroom.maxSeat.must.be.two}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#maxSeat").focus();});
+    		return false;
+    	}
+    	return true;
+    }
+    
+    function checkDrawPercent(){
+    	var drawPercent = $("#drawPercent").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(drawPercent)){
+    		gm.alert("<label th:text='#{coinroom.drawPercent}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#drawPercent").focus();});
+    		return false;
+    	}
+    	return true;
+    }
+	
+</script>
+</body></html>

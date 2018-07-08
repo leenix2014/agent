@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{liveGift.detail}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/swiper.min.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script><link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/popodataime.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+    <style type="text/css">
+    div.item{padding: .1rem 0;font-size: .12rem;border-bottom: solid 1px #e5e5e5;width: 100%;}
+    label{width:150px;display: inline-block;}
+    input,select{display: inline-block;margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;height: .23rem;line-height: .23rem;font-size: .12rem;}
+    </style>
+</head>
+<body>
+<div class="content homepage">
+    <header>
+        <a href="liveGift" class="left"><i class="fa fa-chevron-left"></i></a>
+        <div class="top-tit"><label th:text="#{liveGift.detail}"/></div>
+    </header>
+    <div class="tb-box">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                <form th:action="@{${operType} == 'add' ? 'addLiveGift' : 'updateLiveGift'}" th:object="${liveGift}" method="POST">
+                    <!-- <div class="item">
+                        <label th:text="#{liveGift.giftName}"></label>
+                        <input type="hidden" th:field="*{id}"/>
+                        <span class="detail">
+                            <select th:field="*{giftId}">
+                            	<option th:each="validGift : ${validGifts}" th:value="${validGift.giftId}" th:text="${validGift.giftName}"></option>
+                            </select>
+                        </span>
+                    </div> -->
+                    
+                    <div class="item">
+                        <label th:text="#{liveGift.giftName}"></label>
+                        <input type="hidden" th:field="*{id}"/>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{giftName}" maxlength="10" readonly="readonly"/>
+                            <span th:if="${#fields.hasErrors('giftName')}" th:errors="*{giftName}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{liveGift.cost}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{cost}" maxlength="10"/>
+                            <span th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{liveGift.playEffect}"></label>
+                        <span class="detail">
+                        	<select th:field="*{playEffect}">
+                        		<option value="true"><span th:text="#{common.type.true}"></span></option>
+                        		<option value="false"><span th:text="#{common.type.false}"></span></option>
+                        	</select>
+                            <span th:if="${#fields.hasErrors('playEffect')}" th:errors="*{playEffect}"></span>
+                        </span>
+                    </div>
+                    
+					<div style="text-align: center">
+					<input type="submit" th:if="${operType} != 'add'" th:attr="value=#{operation.update}"/>
+                    <input type="submit" th:if="${operType} == 'add'" th:attr="value=#{operation.add}"/>
+                    <input type="hidden" id="operType" th:attr="value=${operType}"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body></html>

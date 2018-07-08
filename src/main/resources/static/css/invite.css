@@ -1,0 +1,188 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-family: 'tahoma, arial, sans-serif';
+  font-size: 12px;
+  height: 100%;
+}
+body{
+  background-image: url(../img/invite/bg.jpg);
+  background-size: cover;
+  background-position-y: 85px;
+  background-repeat: no-repeat;
+}
+a, img {
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+h1,h2,h3,h4{margin:0;padding:0}
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+.main{
+  margin:0 auto;
+  width: 100%;
+  height: 100%;
+}
+.mobile{
+  display: none;
+}
+.clr:after{
+  content: '';
+  height: 0;
+  visibility: hidden;
+  display: block;
+  clear: both;
+}
+.container{
+}
+.nav{
+    height: 85px;
+    position: relative;
+    background-color: #fff;
+    z-index: 2;
+}
+
+.nav .logo{
+  display: inline-block;
+  background-image: url('../img/invite/logo.png');
+  height: 53px;
+  width: 177px;
+  vertical-align: middle;
+  margin-top: 15px;
+}
+.container-w{
+  width: 960px;
+  margin: 0 auto;
+  position:relative;
+}
+.container-w.pc:before{
+  content:'';
+  position: absolute;
+  background-image: url('../img/invite/moon.png');
+  width: 230px;
+  height: 230px;
+  top: -70px;
+  right: -70px;
+}
+.container .intro-box{
+  float: left;
+}
+.container .slogan{margin-top: 81px;}
+.container .slogan img{
+  display:block;
+  margin-bottom: 10px;
+}
+.container .download{
+    margin-top: 40px;
+}
+.container .download-btn{
+    margin-left: 180px;
+}
+.container .download-btn .iOS{
+    display: block;
+    line-height: 0;
+}
+.container .download-btn .android{
+    display: block;
+    line-height: 0;
+    margin-top: 15px;
+}
+.container .download .qcode{
+    width: 135px;
+    float: left;
+}
+.container .iphone{
+  float: right;
+  width: 340px;
+  height: 400px;
+  position: relative;
+  margin-right: 90px;
+  z-index: 3;
+}
+.container .iphone img{width: 100%;position: relative;top: -35px;}
+.foot{
+  height: 50px;
+  background-color: #2e2c33;
+  padding: 8px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+.foot p{
+  opacity: 0.67;
+  font-size: 12px;
+  color: #ffffff;
+  text-align: center;
+  line-height: 18px;
+  margin: 0;
+}
+.foot p span,.foot p a{
+  display: inline-block;
+  margin-right: 44px;
+  color: #ffffff;
+}
+
+@media only screen and (max-width : 640px) {
+  .main{
+    display: none;
+  }
+  .mobile{
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-image: url('../img/invite/bgphone.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .mobile .p-center{
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    -webkit-transform: translate(-50%,0);
+    transform: translate(-50%,0);
+    width: 320px;
+  }
+  .mobile .logo{
+    width: 42%;
+    margin: 0 auto;
+  }
+  .mobile .logo img{
+    width: 100%;
+  }
+  .mobile .slogan{
+    text-align: center;
+    color: #fff;
+    margin-top: 5%;
+}
+  .mobile .slogan h3{
+    font-size: 22px;
+}
+  .mobile .slogan p{
+    margin: 0;
+    font-size: 17px;
+    opacity: 0.76;
+    margin-top: 2%;
+    text-indent: 12px;
+}
+.mobile .download{display: block;width: 155px;margin: 10% auto 0;line-height: 0;}
+.mobile .download img{
+  width:100%;
+}
+.mobile .download.android{
+  display:none;
+}
+.mobile .fix-phone{
+  position: relative;
+  width: 80%;
+  margin: 15% auto 0;
+  display: block;
+}

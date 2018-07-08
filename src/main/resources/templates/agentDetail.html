@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{agent.detail}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/swiper.min.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script><link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/popodataime.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+    <style type="text/css">
+    div.item{padding: .1rem 0;font-size: .12rem;border-bottom: solid 1px #e5e5e5;width: 100%;}
+    label{width:150px;display: inline-block;}
+    input{display: inline-block;margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;height: .23rem;line-height: .23rem;font-size: .12rem;}
+    </style>
+</head>
+<body>
+<div class="content homepage">
+    <header>
+        <a href="agents" class="left"><i class="fa fa-chevron-left"></i></a>
+        <div class="top-tit"><label th:text="#{agent.detail}"/></div>
+    </header>
+    <div class="tb-box">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                <form th:action="@{${operType} == 'add' ? 'addAgent' : 'updateAgent'}" th:object="${agent}" method="POST" onsubmit="return checkAgent();">
+                    <div class="item">
+                        <label th:text="#{agent.loginid}"></label>
+                        <span class="detail">
+                            <input type="hidden" th:field="*{id}"/>
+                            <input type="text" th:if="${operType} == 'add'" th:field="*{loginId}" maxlength="6"/>
+                            <input type="text" th:if="${operType} != 'add'" readonly="readonly" th:field="*{loginId}"/>
+                            <span th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}">Login ID Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{agent.name}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{name}" maxlength="10"/> 
+                            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item" th:if="${operType} != 'add'">
+                        <label th:text="#{agent.roomCardCount}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" readonly="readonly" th:field="*{roomCardCount}"/>
+                        </span>
+                    </div>
+                    
+                    <div class="item" th:if="${operType} != 'add'">
+                        <label th:text="#{agent.coinCount}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" readonly="readonly" th:field="*{coinCount}"/>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{agent.password}"></label>
+                        <span class="detail" th:if="${operType} != 'add'">
+                            <input class="form-control" type="text" th:if="*{loginId} != ${session.loginUser.loginId}" readonly="readonly" th:field="*{pwd}"/>
+                            <input class="form-control" type="text" th:if="*{loginId} == ${session.loginUser.loginId}" th:field="*{pwd}"/>
+                        </span>
+                        <span class="detail" th:if="${operType} == 'add'">
+                            <input class="form-control" type="text" th:field="*{pwd}" maxlength="30"/>
+                        </span>
+                        <span th:if="${#fields.hasErrors('pwd')}" th:errors="*{pwd}">Password Error</span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{agent.phone}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{phone}" maxlength="20"/> <span
+                                th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item" th:if="${operType} != 'add'">
+                        <label th:text="#{agent.level}"></label>
+                        <span class="detail">
+                            <input class="form-control" readonly="readonly" th:field="*{level}"/>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{agent.discount}"></label>
+                        <span class="detail">
+                            <input class="form-control" th:field="*{discount}" maxlength="2"/>
+                        </span>%
+                    </div>
+                    
+					<div style="text-align: center">
+					<input type="submit" th:if="${operType} != 'add'" th:attr="value=#{operation.update}"/>
+                    <input type="submit" th:if="${operType} == 'add'" th:attr="value=#{operation.add}"/>
+                    </div>
+                    <input type="hidden" id="operType" th:attr="value=${operType}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //时间
+        $(".datetime").popodatetime();
+    })
+    
+    function checkAgent(){
+    	var phone = $("#phone").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(phone)){
+    		gm.alert("<label th:text='#{agent.phone.valid}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#phone").focus();});
+    		return false;
+    	}
+    	var discount = $("#discount").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(discount)){
+    		gm.alert("<label th:text='#{agent.discount}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#discount").focus();});
+    		return false;
+    	}
+    	var goOn = true;
+    	if($("#operType").val() == 'add'){
+			var loginId = $("#loginId").val();
+			var name = $("#name").val();
+			var phone = $("#phone").val();
+	    	$.ajax({type:'POST', url:'checkAgent', data: {loginId:loginId, name:name, phone:phone}, success: function (ret) {
+	    		if(ret.loginIdExists == true){
+	    			gm.alert("<label th:text='#{agent.loginid.exists}'/>");
+	    			goOn = false;
+	    		} else if(ret.nameExists == true){
+	    			gm.alert("<label th:text='#{agent.name.exists}'/>");
+	    			goOn = false;
+	    		} else if(ret.phoneExists == true){
+	    			gm.alert("<label th:text='#{agent.phone.exists}'/>");
+	    			goOn = false;
+	    		} else {
+	    			goOn = true;
+	    		}
+	        }, async: false});
+    	}
+    	return goOn;
+    }
+
+    function Filter() {
+        var keyword = $.trim($("#txtKeyWord").val());
+        $("#divList1").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList2").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList3").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList4").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+    }
+
+    //LoadList();
+</script>
+</body></html>

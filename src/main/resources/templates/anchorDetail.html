@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{anchor.detail}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/swiper.min.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script><link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/popodataime.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+    <style type="text/css">
+    div.item{padding: .1rem 0;font-size: .12rem;border-bottom: solid 1px #e5e5e5;width: 100%;}
+    label{width:150px;display: inline-block;}
+    input,select{display: inline-block;margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;height: .23rem;line-height: .23rem;font-size: .12rem;}
+    textarea{margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;font-size: .12rem;}
+    </style>
+</head>
+<body>
+<div class="content homepage">
+    <header>
+        <a href="anchors" class="left"><i class="fa fa-chevron-left"></i></a>
+        <div class="top-tit"><label th:text="#{anchor.detail}"/></div>
+    </header>
+    <div class="tb-box">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                <form th:action="@{${operType} == 'add' ? 'addAnchor' : 'updateAnchor'}" th:object="${anchor}" method="POST" onsubmit="return checkAnchor();">
+                    <div class="item">
+                        <label th:text="#{anchor.id}"></label>
+                        <span class="detail">
+                            <input type="hidden" th:field="*{id}"/>
+                            <input type="text" th:field="*{anchorId}" maxlength="3"/>
+                            <span th:if="${#fields.hasErrors('anchorId')}" th:errors="*{anchorId}">Anchor ID Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{anchor.pwd}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{pwd}" maxlength="20"/>
+                            <span th:if="${#fields.hasErrors('pwd')}" th:errors="*{pwd}">Anchor Password Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{anchor.name}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{anchorName}" maxlength="10"/>
+                            <span th:if="${#fields.hasErrors('anchorName')}" th:errors="*{anchorName}">Anchor Name Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{anchor.type}"></label>
+                        <span class="detail">
+                        	<select th:field="*{anchorType}">
+                            	<option value="live"><span th:text="#{anchor.type.live}"></span></option>
+                            	<option value="pusher"><span th:text="#{anchor.type.pusher}"></span></option>
+                            	<option value="catcher"><span th:text="#{anchor.type.catcher}"></span></option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('anchorType')}" th:errors="*{anchorType}">Anchor Type Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{common.adminIds}"></label>
+                        <span class="detail">
+                            <textarea class="form-control" th:field="*{adminIds}" maxlength="250" rows="5" cols="22"></textarea>
+                            <span th:if="${#fields.hasErrors('adminIds')}" th:errors="*{adminIds}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{anchor.title}"></label>
+                        <span class="detail">
+                            <input class="form-control" th:field="*{title}" maxlength="30"/>
+                            <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Anchor Title Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{anchor.cost}"></label>
+                        <span class="detail">
+                            <input class="form-control" th:field="*{cost}" maxlength="9"/>
+                            <span th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}">Anchor Cost Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{coinroom.encrypted}"></label>
+                        <span class="detail">
+                        	<select th:field="*{encrypted}" onchange="onEncryptedChanged()">
+                            	<option value="true"><span th:text="#{coinroom.encrypt.true}"></span></option>
+                            	<option value="false"><span th:text="#{coinroom.encrypt.false}"></span></option>
+                            </select>
+                        </span>
+                    </div>
+                    
+                    <div class="item" id="password">
+                        <label th:text="#{coinroom.pwd}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" maxlength="4" th:field="*{roomPwd}"/>
+                            <span th:if="${#fields.hasErrors('roomPwd')}" th:errors="*{roomPwd}">Room Password Error</span>
+                        </span>
+                    </div>
+                    
+					<div style="text-align: center">
+					<input type="submit" th:if="${operType} != 'add'" th:attr="value=#{operation.update}"/>
+                    <input type="submit" th:if="${operType} == 'add'" th:attr="value=#{operation.add}"/>
+                    <input type="hidden" id="operType" th:attr="value=${operType}"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+    	onEncryptedChanged();
+    	
+        //时间
+        $(".datetime").popodatetime();
+    })
+    
+    function onEncryptedChanged(){
+    	var encrypted = $("#encrypted").val();
+    	if(encrypted == 'true'){
+    		$("#password").css("display", "block");
+    	} else {
+    		$("#password").css("display", "none");
+    	}
+    }
+    
+    function checkAnchor(){
+    	var anchorId = $("#anchorId").val();
+    	if(!/^\+?[0-9][0-9]*$/.test(anchorId)){
+    		gm.alert("<label th:text='#{anchor.id}+#{anchor.number}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#anchorId").focus();});
+    		return false;
+    	}
+    	var cost = $("#cost").val();
+    	if(!/^\+?[0-9][0-9]*$/.test(cost)){
+    		gm.alert("<label th:text='#{anchor.cost}+#{anchor.number}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#cost").focus();});
+    		return false;
+    	}
+    	var encrypted = $("#encrypted").val();
+    	var roomPwd = $("#roomPwd").val();
+    	/*<![CDATA[*/
+    	if(encrypted == 'true' && roomPwd == ''){
+    	/*]]>*/
+    		gm.alert("<label th:text='#{coinroom.pwd.empty}'/>");
+    		return false;
+    	}
+    	var goOn = true;
+    	var adminIds = $("#adminIds").val();
+    	$.ajax({type:'POST', url:'checkAnchorAdminIds', data: {adminIds:adminIds}, success: function (ret) {
+    		if(ret.success == false){
+    			goOn = false;
+    			gm.alert(ret.message);
+    		} else {
+    			goOn = true;
+    		}
+        }, async: false});
+    	if(!goOn){
+    		return false;
+    	}
+    	var id = $("#id").val();
+    	if($("#operType").val() == 'add'){
+    		id = 0;
+    	}
+		var anchorId = $("#anchorId").val();
+	    $.ajax({type:'POST', url:'checkAnchor', data: {anchorId:anchorId, id:id}, success: function (ret) {
+	    	if(ret.anchorIdExists == true){
+	    		gm.alert("<label th:text='#{anchor.id.exists}'/>");
+	    		goOn = false;
+	    	} else {
+	    		goOn = true;
+	    	}
+	    }, async: false});
+    	return goOn;
+    }
+
+</script>
+</body></html>

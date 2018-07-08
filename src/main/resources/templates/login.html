@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{login}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/login.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script>
+    <script type="text/javascript" src="js/md5.js"></script>
+    <link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+</head>
+<body>
+<div class="content login">
+    <div class="part-1">
+        <div class="logo"><img src="img/logo.png"/></div>
+    </div>
+    <div class="part-2">
+        <div class="inp-box icon-1"><input type="text" th:attr="placeholder=#{login.username}" id="txtUserName"/></div>
+        <div class="inp-box icon-2"><input type="password" th:attr="placeholder=#{login.password}" id="txtPassWord" maxlength="20"/></div>
+        <div style="padding: .02rem 0;position: relative;line-height: .5rem;border-bottom: solid 1px #626262;"><label th:text="#{login.language}"/><span style="padding-left: .08rem;"><select name="language" id="lang"><option value ="zh_CN">中文</option><option value ="en_US">English</option></select></span></div>
+        <div class="inp-box icon-3"><input type="text" th:attr="placeholder=#{login.verifycode}" id="txtCheckCode" maxlength="4"/><div class="code"><img id="imgCheckCode" src="getVerifyCode"/></div></div>
+        <button type="submit" id="btnLogin"><label th:text="#{login}"/></button>
+    </div>
+   
+</div>
+
+<script type="text/javascript">
+
+    $("#imgCheckCode").attr("src", "getVerifyCode");
+    $("#imgCheckCode").show();
+
+    $("#imgCheckCode").click(function () {
+        $("#imgCheckCode").attr("src", "getVerifyCode");
+    });
+    
+    
+    /*<![CDATA[*/
+    document.onkeydown = function(event){
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+         if(e && e.keyCode==13){ // enter 键
+             login();
+        }
+    };
+    $("#btnLogin").click(login);
+    /*]]>*/
+    
+    function login(){
+    	var username = $.trim($("#txtUserName").val());
+        var password = $("#txtPassWord").val();
+        var checkcode = $("#txtCheckCode").val();
+        var language = $("#lang").val();
+
+        if (username == "") {
+            gm.alert("<label th:text='#{login.prompt.username}'/>");
+            return;
+        }
+
+        if (password == "") {
+            gm.alert("<label th:text='#{login.prompt.password}'/>");
+            return;
+        }
+
+        if (checkcode == "") {
+            gm.alert("<label th:text='#{login.prompt.verifycode}'/>");
+            return;
+        }
+
+        post("login", { type:"login", username: username, password: hex_md5(password), language:language, checkcode: checkcode }, function (ret) {
+
+            if (ret.success == true) {
+                window.location.href = "menu";
+            }
+            else {
+                gm.alert(ret.message);
+                $("#imgCheckCode").attr("src", "getVerifyCode");
+            }
+
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{menu.roomCardHis}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/swiper.min.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script><link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/popodataime.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+</head>
+<body>
+<div class="content homepage">
+    <header>
+        <a href="menu" class="left"><i class="fa fa-chevron-left"></i></a>
+        <div class="top-tit"><label th:text="${roomId}"/><label th:text="#{menu.roomCardHis}"/></div>
+        <a href="logout" class="right"><label th:text="#{menu.logout}" style="font-size: .12rem;cursor: pointer"/></a>
+    </header>
+    <div class="swiper-container tb-box swiper-container-horizontal">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                <table class="tb">
+                    <thead>
+                    <tr>
+                        <td><label th:text="#{common.time}"/></td>
+                        <td><label th:text="#{roomCardBill.source}"/></td>
+                        <td><label th:text="#{roomCardBill.source.name}"/></td>
+                        <td><label th:text="#{roomCardBill.amount}"/></td>
+                        <td><label th:text="#{roomCardBill.beforeBal}"/></td>
+                        <td><label th:text="#{roomCardBill.afterBal}"/></td>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="scroll-wrap">
+                <div th:if="${roomCardBills.size() == 0}" style="text-align: center"><span th:text="#{common.noData}"></span></div>
+                <table class="tb">
+                    <tbody id="divList1">
+                    	<tr th:each="roomCardBill : ${roomCardBills}">
+		                	<td><span th:text="${roomCardBill.createTime}"></span></td>
+		                    <td><span th:text="#{roomCardBill.source.+${roomCardBill.source}}"></span></td>
+		                    <td><span th:text="${roomCardBill.sourceName}"></span></td>
+		                    <td><span th:text="${roomCardBill.amount}"></span></td>
+		                    <td><span th:text="${roomCardBill.beforeBal}"></span></td>
+		                    <td><span th:text="${roomCardBill.afterBal}"></span></td>
+                    	</tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-next"><i class="fa fa-chevron-right"></i></div>
+    <div class="swiper-prev swiper-button-disabled"><i class="fa fa-chevron-left"></i></div>
+</div>
+
+<script th:inline="javascript">
+    $(function () {
+        //时间
+        $(".datetime").popodatetime();
+
+        var swiper = new Swiper('.swiper-container', {
+            nextButton: '.swiper-next',
+            prevButton: '.swiper-prev',
+            preventClicks: false,
+        });
+    })
+    
+    function Filter() {
+        var keyword = $.trim($("#txtKeyWord").val());
+        $("#divList1").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList2").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList3").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList4").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+    }
+
+    //LoadList();
+</script>
+</body></html>

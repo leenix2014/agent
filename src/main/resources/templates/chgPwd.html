@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{topup.topupUser}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/swiper.min.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script><link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/md5.js"></script>
+    <script type="text/javascript" src="js/popodataime.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+    <style type="text/css">
+    div.item{padding: .1rem 0;font-size: .12rem;border-bottom: solid 1px #e5e5e5;width: 100%;}
+    label{width:150px;display: inline-block;}
+    input{display: inline-block;margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;height: .23rem;line-height: .23rem;font-size: .12rem;}
+    </style>
+</head>
+<body>
+<div class="content homepage">
+    <header>
+        <a href="menu" class="left"><i class="fa fa-chevron-left"></i></a>
+        <div class="top-tit"><label th:text="#{menu.chgPwd}"/></div>
+    </header>
+    <div class="tb-box">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                  <div class="item">
+                      <label th:text="#{chgPwd.oldPwd}"></label>
+                      <span class="detail">
+                          <input type="password" id="oldPwd" maxlength="20"/>
+                      </span>
+                  </div>
+                  
+                  <div class="item">
+                      <label th:text="#{chgPwd.newPwd1}"></label>
+                      <span class="detail">
+                          <input class="form-control" type="password" id="newPwd1" maxlength="20"/> 
+                      </span>
+                  </div>
+                  
+                  <div class="item">
+                      <label th:text="#{chgPwd.newPwd2}"></label>
+                      <span class="detail">
+                          <input class="form-control" type="password" id="newPwd2" maxlength="20"/> 
+                      </span>
+                  </div>
+                  
+			<div style="text-align: center">
+                  <input type="submit" id="btnChange" th:attr="value=#{operation.chgPwd}"/>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#btnChange").click(function(){
+    	var oldPwd = $("#oldPwd").val();
+    	if(oldPwd == ""){
+    		gm.alert("<label th:text='#{alert.chgPwd.oldPwd.empty}'/>");
+    		return;
+    	}
+    	var newPwd1 = $("#newPwd1").val();
+    	if(newPwd1 == ""){
+    		gm.alert("<label th:text='#{alert.chgPwd.newPwd1.empty}'/>");
+    		return;
+    	}
+    	var newPwd2 = $("#newPwd2").val();
+    	if(newPwd2 == ""){
+    		gm.alert("<label th:text='#{alert.chgPwd.newPwd2.empty}'/>");
+    		return;
+    	}
+    	if(newPwd2 != newPwd1){
+    		gm.alert("<label th:text='#{alert.chgPwd.newPwd.not.same}'/>");
+    		return;
+    	}
+    	if(newPwd1 == oldPwd){
+    		gm.alert("<label th:text='#{alert.chgPwd.newPwd.equal.oldPwd}'/>");
+    		return;
+    	}
+    	$("#btnChange").attr("disabled", "disabled");
+    	post("chgPwdSubmit", {oldPwd: hex_md5(oldPwd), newPwd: newPwd1}, function (ret) {
+
+            if (ret.success == true) {
+            	gm.alert("<label th:text='#{alert.chgPwd.success}'/>");
+            	setTimeout(function(){
+            		window.location.href = "menu";
+            	}, 500);
+            }
+            else {
+                gm.alert(ret.message);
+            }
+            $("#btnChange").removeAttr("disabled");
+        });
+    });
+</script>
+</body></html>

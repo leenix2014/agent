@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!-- saved from url=(0085)http://niuniu.xingziliao.com/mch/NiuStat.aspx?nGameRoomId=2674&rt=0.21928255188491064 -->
+<html lang="zh-CN">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{menu}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+</head>
+<body>
+<div class="content homepage">
+    <div class="list" style="margin-top:1rem;">
+        <ul>
+            <li th:if="${session.loginType} == 'agent' and (${session.loginUser.level} lt 3)"><a href="agents" th:text="#{menu.agent}"></a></li>
+            <li th:if="${session.loginType} == 'agent' and ${session.loginUser.admin}"><a href="appVersions" th:text="#{menu.appversion}"></a></li>
+            <li th:if="${session.loginType} == 'agent' and ${session.loginUser.admin}"><a href="commonConfigs" th:text="#{menu.commonConfig}"></a></li>
+            <li th:if="${session.loginType} == 'agent' and ${session.loginUser.admin}"><a href="anchors" th:text="#{menu.anchor}"></a></li>
+            <li th:if="${session.loginType} == 'agent' and ${session.loginUser.admin}"><a href="anchorsSumBill" th:text="#{menu.anchorbill}"></a></li>
+            <li th:if="${session.loginType} == 'agent' and ${session.loginUser.admin}"><a href="coinrooms" th:text="#{menu.coinroom}"></a></li>
+            <li th:if="${session.loginType} == 'agent' and ${session.loginUser.admin}"><a href="roulettes" th:text="#{menu.roulette}"></a></li>
+            <li th:if="${session.loginType} == 'agent' and ${session.loginUser.admin}"><a href="baccarats" th:text="#{menu.baraccat}"></a></li>
+            <li th:if="${session.loginType} == 'agent'"><a href="topupList" th:text="#{menu.topup}"></a></li>
+            <li th:if="${session.loginType} == 'agent'"><a href="withdrawList?type=user" th:text="#{menu.withdraw}"></a></li>
+            <li th:if="${session.loginType} == 'agent' and (${session.loginUser.level} lt 3)"><a href="withdrawList?type=agent" th:text="#{menu.withdrawAgent}"></a></li>
+            <li th:if="${session.loginType} == 'user'"><a href="topupUser" th:text="#{topup.transferUser}"></a></li>
+            <li th:if="${session.loginType} == 'user'"><a href="roomCardHis" th:text="#{menu.roomCardHis}"></a></li>
+            <li><a href="chgPwd" th:text="#{menu.chgPwd}"></a></li>
+            <li th:if="${session.loginType} == 'agent' and (${session.loginUser.level} lt 2)"><a href="rooms" th:text="#{menu.rooms}"></a></li>
+            <li><a href="logout" th:text="#{menu.logout}"></a></li>
+        </ul>
+    </div>
+</div>
+
+</body></html>

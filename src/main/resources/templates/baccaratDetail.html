@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{baccarat.detail}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/swiper.min.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script><link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/popodataime.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+    <style type="text/css">
+    div.item{padding: .1rem 0;font-size: .12rem;border-bottom: solid 1px #e5e5e5;width: 100%;}
+    label{width:150px;display: inline-block;}
+    input[type="text"], input[type="submit"],select{display: inline-block;margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;height: .23rem;line-height: .23rem;font-size: .12rem;}
+    .detail label{
+    	display: inline-block;margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;height: .23rem;line-height: .23rem;font-size: .12rem;
+    }
+    textarea{margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;font-size: .12rem;}
+    </style>
+</head>
+<body>
+<div class="content homepage">
+    <header>
+        <a href="baccarats" class="left"><i class="fa fa-chevron-left"></i></a>
+        <div class="top-tit"><label th:text="#{baccarat.detail}"/></div>
+    </header>
+    <div class="tb-box">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                <form th:action="@{${operType} == 'add' ? 'addBaccarat' : 'updateBaccarat'}" th:object="${baccarat}" method="POST" onsubmit="return checkBaccarat();">
+                    <div class="item">
+                        <label th:text="#{baccarat.id}"></label>
+                        <span class="detail">
+                            <input type="hidden" th:field="*{id}"/>
+                            <input type="hidden" th:field="*{overTime}" value="0"/>
+                            <input type="text" th:field="*{roomId}" maxlength="5"/>
+                            <span th:if="${#fields.hasErrors('roomId')}" th:errors="*{roomId}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{common.channel}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{channel}"/>
+                            <span th:if="${#fields.hasErrors('channel')}" th:errors="*{channel}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{common.adminIds}"></label>
+                        <span class="detail">
+                            <textarea class="form-control" th:field="*{adminIds}" maxlength="250" rows="5" cols="22"></textarea>
+                            <span th:if="${#fields.hasErrors('adminIds')}" th:errors="*{adminIds}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{baccarat.takeSeatCoin}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{takeSeatCoin}" maxlength="11"/>
+                            <span th:if="${#fields.hasErrors('takeSeatCoin')}" th:errors="*{takeSeatCoin}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{baccarat.minCoin}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{minCoin}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('minCoin')}" th:errors="*{minCoin}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{baccarat.betTime}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{betTime}" maxlength="4"/>
+                            <span th:if="${#fields.hasErrors('betTime')}" th:errors="*{betTime}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{baccarat.minBet}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{minBet}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('minBet')}" th:errors="*{minBet}"></span>
+                        </span>
+                    </div>
+                    
+					<div class="item">
+                        <label th:text="#{baccarat.maxBet}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{maxBet}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('maxBet')}" th:errors="*{maxBet}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{baccarat.maxRed}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{maxRed}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('maxRed')}" th:errors="*{maxRed}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{baccarat.tiePairMinBet}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{tiePairMinBet}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('tiePairMinBet')}" th:errors="*{tiePairMinBet}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{baccarat.tiePairMaxBet}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{tiePairMaxBet}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('tiePairMaxBet')}" th:errors="*{tiePairMaxBet}"></span>
+                        </span>
+                    </div>         
+                    
+                    <div class="item">
+                        <label th:text="#{baccarat.drawPercent}"></label>
+                        <span class="detail">
+                            <input class="form-control"  type="text" th:field="*{drawPercent}" maxlength="2"/>%
+                            <span th:if="${#fields.hasErrors('drawPercent')}" th:errors="*{drawPercent}"></span>
+                        </span>
+                    </div>
+                    
+					<div style="text-align: center">
+					<input type="submit" th:if="${operType} != 'add'" th:attr="value=#{operation.update}"/>
+                    <input type="submit" th:if="${operType} == 'add'" th:attr="value=#{operation.add}"/>
+                    <input type="hidden" id="operType" th:attr="value=${operType}"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+    })
+    
+    function checkBaccarat(){
+    	var takeSeatCoin = $("#takeSeatCoin").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(takeSeatCoin)){
+    		gm.alert("<label th:text='#{baccarat.takeSeatCoin}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#takeSeatCoin").focus();});
+    		return false;
+    	}
+    	var minCoin = $("#minCoin").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(minCoin)){
+    		gm.alert("<label th:text='#{baccarat.minCoin}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#minCoin").focus();});
+    		return false;
+    	}
+    	var betTime = $("#betTime").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(betTime)){
+    		gm.alert("<label th:text='#{baccarat.betTime}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#betTime").focus();});
+    		return false;
+    	}
+    	var minBet = $("#minBet").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(minBet)){
+    		gm.alert("<label th:text='#{baccarat.minBet}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#minBet").focus();});
+    		return false;
+    	}
+    	var maxBet = $("#maxBet").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(maxBet)){
+    		gm.alert("<label th:text='#{baccarat.maxBet}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#maxBet").focus();});
+    		return false;
+    	}
+    	/*<![CDATA[*/
+    	if(parseInt(maxBet) < parseInt(minBet)){
+    	/*]]>*/
+    		gm.alert("<label th:text='#{baccarat.maxBet}+#{alert.must.be.greater}+#{baccarat.minBet}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#maxBet").focus();});
+    		return false;
+    	}
+    	var maxRed = $("#maxRed").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(maxRed)){
+    		gm.alert("<label th:text='#{baccarat.maxRed}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#maxRed").focus();});
+    		return false;
+    	}
+    	var tiePairMinBet = $("#tiePairMinBet").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(tiePairMinBet)){
+    		gm.alert("<label th:text='#{baccarat.tiePairMinBet}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#tiePairMinBet").focus();});
+    		return false;
+    	}
+    	var tiePairMaxBet = $("#tiePairMaxBet").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(tiePairMaxBet)){
+    		gm.alert("<label th:text='#{baccarat.tiePairMaxBet}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#tiePairMaxBet").focus();});
+    		return false;
+    	}
+    	/*<![CDATA[*/
+    	if(parseInt(tiePairMaxBet) < parseInt(tiePairMinBet)){
+    	/*]]>*/
+    		gm.alert("<label th:text='#{baccarat.tiePairMaxBet}+#{alert.must.be.greater}+#{baccarat.tiePairMinBet}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#tiePairMaxBet").focus();});
+    		return false;
+    	}
+    	var drawPercent = $("#drawPercent").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(drawPercent)){
+    		gm.alert("<label th:text='#{baccarat.drawPercent}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#drawPercent").focus();});
+    		return false;
+    	}
+    	var adminIds = $("#adminIds").val();
+    	var goOn = true;
+    	$.ajax({type:'POST', url:'checkAdminIds', data: {adminIds:adminIds}, success: function (ret) {
+    		if(ret.success == false){
+    			goOn = false;
+    			gm.alert(ret.message);
+    		} else {
+    			goOn = true;
+    		}
+        }, async: false});
+    	if(!goOn){
+    		return false;
+    	}
+    	var id = $("#id").val();
+    	if($("#operType").val() == 'add'){
+    		id = 0;
+    	}
+    	var roomId = $("#roomId").val()
+    	var channel = $("#channel").val()
+    	if(!/^\+?[0-9|a-z|A-Z]*$/.test(channel)){
+    		gm.alert("<label th:text='#{common.channel.must.alphabet.or.number}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#channel").focus();});
+    		return false;
+    	}
+	    $.ajax({type:'POST', url:'checkBaccarat', data: {roomId:roomId, channel:channel, id:id}, success: function (ret) {
+	    	if(ret.roomIdExists == true){
+	    		gm.alert("<label th:text='#{baccarat.id.exists}'/>");
+	    		goOn = false;
+	    	} else if(ret.channelExists == true){
+	    		gm.alert("<label th:text='#{common.channel.exists}'/>");
+	    		goOn = false;
+	    	} else {
+	    		goOn = true;
+	    	}
+	    }, async: false});
+    	return goOn;
+    }
+
+    function Filter() {
+        var keyword = $.trim($("#txtKeyWord").val());
+        $("#divList1").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList2").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList3").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList4").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+    }
+
+    //LoadList();
+</script>
+</body></html>

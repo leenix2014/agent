@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{menu.roomBill}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/swiper.min.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script><link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/popodataime.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+</head>
+<body>
+<div class="content homepage">
+    <header>
+        <a href="rooms" class="left"><i class="fa fa-chevron-left"></i></a>
+        <div class="top-tit"><label th:text="${roomId}"/><label th:text="#{menu.roomBill}"/></div>
+        <a href="logout" class="right"><label th:text="#{menu.logout}" style="font-size: .12rem;cursor: pointer"/></a>
+    </header>
+    <div class="swiper-container tb-box swiper-container-horizontal">
+        <div class="search">
+            <input type="search" th:attr="placeholder=#{inning.search.tips}" id="txtKeyWord" oninput="Filter()"/>
+            <a style="cursor:pointer" class="search-btn"><i class="fa fa-search"></i></a>
+        </div>
+        
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                <table class="tb">
+                    <thead>
+                    <tr>
+                        <td><label th:text="#{inning.userName}"/></td>
+                        <td><label th:text="#{inning.userId}"/></td>
+                        <td><label th:text="#{room.total}"/></td>
+                        <td><label th:text="#{room.winLose}"/></td>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="scroll-wrap">
+                <div th:if="${bills.size() == 0}" style="text-align: center"><span th:text="#{room.bill.noData}"></span></div>
+                <table class="tb">
+                    <tbody id="divList1">
+                    	<tr th:each="inning : ${bills}">
+		                	<td><span th:text="${inning.userName}"></span></td>
+		                    <td><span th:text="${inning.userId}"></span></td>
+		                    <td><span th:text="${inning.endTotal}"></span></td>
+		                    <td th:if="${inning.endTotal gt 0}"><span th:text="#{room.win}"></span></td>
+		                    <td th:if="${inning.endTotal eq 0}"><span th:text="#{room.draw}"></span></td>
+		                    <td th:if="${inning.endTotal lt 0}"><span th:text="#{room.lose}"></span></td>
+                    	</tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-next"><i class="fa fa-chevron-right"></i></div>
+    <div class="swiper-prev swiper-button-disabled"><i class="fa fa-chevron-left"></i></div>
+</div>
+
+<script th:inline="javascript">
+    $(function () {
+        //时间
+        $(".datetime").popodatetime();
+
+        var swiper = new Swiper('.swiper-container', {
+            nextButton: '.swiper-next',
+            prevButton: '.swiper-prev',
+            preventClicks: false,
+        });
+    })
+    
+    function Filter() {
+        var keyword = $.trim($("#txtKeyWord").val());
+        $("#divList1").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList2").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList3").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList4").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+    }
+
+    //LoadList();
+</script>
+</body></html>

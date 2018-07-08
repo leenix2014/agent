@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="#{roulette.detail}"></title>
+    <link href="css/font-awesome.css" rel="stylesheet"/>
+    <link href="css/plugin.css" rel="stylesheet"/>
+    <link href="css/swiper.min.css" rel="stylesheet"/>
+    <link href="css/profit.css" rel="stylesheet"/>
+    <link href="img/icon.png" rel="icon" type="image/x-icon"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script><link href="css/layer.css" type="text/css" rel="styleSheet" id="layermcss"/>
+    <script type="text/javascript" src="js/emoji.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/popodataime.js"></script>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+    <style type="text/css">
+    div.item{padding: .1rem 0;font-size: .12rem;border-bottom: solid 1px #e5e5e5;width: 100%;}
+    label{width:150px;display: inline-block;}
+    input[type="text"], input[type="submit"],select{display: inline-block;margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;height: .23rem;line-height: .23rem;font-size: .12rem;}
+    .detail label{
+    	display: inline-block;margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;height: .23rem;line-height: .23rem;font-size: .12rem;
+    }
+    textarea{margin-left: .05rem;padding: 0 .1rem;color: #7a1128;border: solid 1px #7a1128;
+    	border-radius: 5px;font-size: .12rem;}
+    </style>
+</head>
+<body>
+<div class="content homepage">
+    <header>
+        <a href="roulettes" class="left"><i class="fa fa-chevron-left"></i></a>
+        <div class="top-tit"><label th:text="#{roulette.detail}"/></div>
+    </header>
+    <div class="tb-box">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-active" style="width: 640px;">
+                <form th:action="@{${operType} == 'add' ? 'addRoulette' : 'updateRoulette'}" th:object="${roulette}" method="POST" onsubmit="return checkRoulette();">
+                    <div class="item">
+                        <label th:text="#{roulette.id}"></label>
+                        <span class="detail">
+                            <input type="hidden" th:field="*{id}"/>
+                            <input type="text" th:field="*{roomId}" maxlength="5"/>
+                            <span th:if="${#fields.hasErrors('roomId')}" th:errors="*{roomId}">Room ID Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{common.channel}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{channel}"/>
+                            <span th:if="${#fields.hasErrors('channel')}" th:errors="*{channel}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{roulette.gameType}"></label>
+                        <span class="detail">
+                            <select th:field="*{gameType}">
+                            	<option value="37"><span th:text="#{roulette.gameType.37}"></span></option>
+                            	<!-- <option value="38"><span th:text="#{roulette.gameType.38}"></span></option>
+                            	<option value="25"><span th:text="#{roulette.gameType.25}"></span></option> -->
+                            </select>
+                            <span th:if="${#fields.hasErrors('gameType')}" th:errors="*{gameType}">Game Type Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{common.adminIds}"></label>
+                        <span class="detail">
+                            <textarea class="form-control" th:field="*{adminIds}" maxlength="250" rows="5" cols="22"></textarea>
+                            <span th:if="${#fields.hasErrors('adminIds')}" th:errors="*{adminIds}"></span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{roulette.minCoin}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{minCoin}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('minCoin')}" th:errors="*{minCoin}">Minimum Coin Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{roulette.betTime}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{betTime}" maxlength="4"/>
+                            <span th:if="${#fields.hasErrors('betTime')}" th:errors="*{betTime}">Bet Time Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{roulette.prizedTime}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{prizedTime}" maxlength="4"/>
+                            <span th:if="${#fields.hasErrors('prizedTime')}" th:errors="*{prizedTime}">Prized Time Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{roulette.minBet}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{minBet}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('minBet')}" th:errors="*{minBet}">Minimum Bet Error</span>
+                        </span>
+                    </div>
+                    
+					<div class="item">
+                        <label th:text="#{roulette.maxBet}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{maxBet}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('maxBet')}" th:errors="*{maxBet}">Maximum Bet Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{roulette.maxTotalBet}"></label>
+                        <span class="detail">
+                            <input class="form-control" type="text" th:field="*{maxTotalBet}" maxlength="8"/>
+                            <span th:if="${#fields.hasErrors('maxTotalBet')}" th:errors="*{maxTotalBet}">Need Charge Coin Error</span>
+                        </span>
+                    </div>
+                    
+                    <div class="item">
+                        <label th:text="#{roulette.drawPercent}"></label>
+                        <span class="detail">
+                            <input class="form-control"  type="text" th:field="*{drawPercent}" maxlength="2"/>%
+                            <span th:if="${#fields.hasErrors('drawPercent')}" th:errors="*{drawPercent}">Draw Percent Error</span>
+                        </span>
+                    </div>
+                    
+					<div style="text-align: center">
+					<input type="submit" th:if="${operType} != 'add'" th:attr="value=#{operation.update}"/>
+                    <input type="submit" th:if="${operType} == 'add'" th:attr="value=#{operation.add}"/>
+                    <input type="hidden" id="operType" th:attr="value=${operType}"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+    })
+    
+    function checkRoulette(){
+    	var minCoin = $("#minCoin").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(minCoin)){
+    		gm.alert("<label th:text='#{roulette.minCoin}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#minCoin").focus();});
+    		return false;
+    	}
+
+    	var betTime = $("#betTime").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(betTime)){
+    		gm.alert("<label th:text='#{roulette.betTime}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#betTime").focus();});
+    		return false;
+    	}
+    	var prizedTime = $("#prizedTime").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(prizedTime)){
+    		gm.alert("<label th:text='#{roulette.prizedTime}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#prizedTime").focus();});
+    		return false;
+    	}
+    	var minBet = $("#minBet").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(minBet)){
+    		gm.alert("<label th:text='#{roulette.minBet}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#minBet").focus();});
+    		return false;
+    	}
+    	var maxBet = $("#maxBet").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(maxBet)){
+    		gm.alert("<label th:text='#{roulette.maxBet}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#maxBet").focus();});
+    		return false;
+    	}
+    	var maxTotalBet = $("#maxTotalBet").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(maxTotalBet)){
+    		gm.alert("<label th:text='#{roulette.maxTotalBet}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#maxTotalBet").focus();});
+    		return false;
+    	}
+    	/*<![CDATA[*/
+    	if(parseInt(maxBet) < parseInt(minBet)){
+    	/*]]>*/
+    		gm.alert("<label th:text='#{roulette.maxBet}+#{alert.must.be.greater}+#{roulette.minBet}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#maxBet").focus();});
+    		return false;
+    	}
+    	/*<![CDATA[*/
+    	if(parseInt(maxTotalBet) < parseInt(maxBet)){
+    	/*]]>*/
+    		gm.alert("<label th:text='#{roulette.maxTotalBet}+#{alert.must.be.greater}+#{roulette.maxBet}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#maxTotalBet").focus();});
+    		return false;
+    	}
+    	var drawPercent = $("#drawPercent").val();
+    	if(!/^\+?[1-9][0-9]*$/.test(drawPercent)){
+    		gm.alert("<label th:text='#{roulette.drawPercent}+#{alert.positive.integer}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#drawPercent").focus();});
+    		return false;
+    	}
+    	
+    	var adminIds = $("#adminIds").val();
+    	var goOn = true;
+    	$.ajax({type:'POST', url:'checkRouletteAdminIds', data: {adminIds:adminIds}, success: function (ret) {
+    		if(ret.success == false){
+    			goOn = false;
+    			gm.alert(ret.message);
+    		} else {
+    			goOn = true;
+    		}
+        }, async: false});
+    	if(!goOn){
+    		return false;
+    	}
+    	var id = $("#id").val();
+    	if($("#operType").val() == 'add'){
+    		id = 0;
+    	}
+    	var roomId = $("#roomId").val()
+    	var channel = $("#channel").val()
+    	if(!/^\+?[0-9|a-z|A-Z]*$/.test(channel)){
+    		gm.alert("<label th:text='#{common.channel.must.alphabet.or.number}'/>", "<label th:text='#{btn.confirm}'/>", function(){$("#channel").focus();});
+    		return false;
+    	}
+    	var goOn = true;
+    	$.ajax({type:'POST', url:'checkRoulette', data: {roomId:roomId, channel:channel, id:id}, success: function (ret) {
+    		if(ret.roomIdExists == true){
+    			gm.alert("<label th:text='#{roulette.id.exists}'/>");
+    			goOn = false;
+    		} else if(ret.channelExists == true){
+    			gm.alert("<label th:text='#{common.channel.exists}'/>");
+    			goOn = false;
+    		} else {
+    			goOn = true;
+    		}
+        }, async: false});
+    	
+    	return goOn;
+    }
+
+    function Filter() {
+        var keyword = $.trim($("#txtKeyWord").val());
+        $("#divList1").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList2").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList3").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+        $("#divList4").children("tr").each(function (index, element) {
+            if ($(element).find("div.name").html().indexOf(keyword) != -1 || keyword == "") {
+                $(element).show();
+            }
+            else {
+                $(element).hide();
+            }
+        });
+    }
+
+    //LoadList();
+</script>
+</body></html>

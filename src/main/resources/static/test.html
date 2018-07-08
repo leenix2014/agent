@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+</head>
+<body>
+<script type="text/javascript">
+	//function a(){return 'a'};
+	//function b(){return 'b'};
+	function T(x){return function f(y){return x}};
+	function F(x){return function f(y){return y}};
+	//alert(T(a)(b)());
+	//alert(F(a)(b)());
+	
+	function AND(x,y){return x(y)(F)};
+	function OR(x,y){return x(T)(y)};
+	function NOT(x){return x(F)(T)};
+	
+	console.log(AND(T, T));
+	console.log(AND(F, T));
+	console.log(OR(T, F));
+	console.log(OR(F, F));
+	console.log(NOT(F));
+	console.log(NOT(T));
+	
+	//function omega(x){return x(x)};
+	//alert(omega(omega));
+	
+	function zero(f,x){return x};
+	function one(f,x){return f(x)};
+	function two(f,x){return f(f(x))};
+	function inc(N,f,x){return f(N,f,x)};
+	
+</script>
+</body>
+</html>
